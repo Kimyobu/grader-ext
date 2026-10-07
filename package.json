@@ -1,0 +1,289 @@
+{
+  "name": "grader-ext",
+  "displayName": "POSN Grader",
+  "description": "Sync POSN Grader challenges into your workspace, run and submit code without leaving VS Code.",
+  "version": "0.1.0",
+  "publisher": "krusomchai",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Education"
+  ],
+  "keywords": [
+    "grader",
+    "posn",
+    "programming",
+    "contest"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "graderExplorer",
+          "title": "Grader",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "graderExplorer": [
+        {
+          "id": "grader.problems",
+          "name": "Challenges",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "id": "krusomchai.grader.score.full",
+        "description": "Grader: challenge or day at full score.",
+        "defaults": {
+          "dark": "#3fb950",
+          "light": "#1a7f37",
+          "highContrast": "#3fb950",
+          "highContrastLight": "#1a7f37"
+        }
+      },
+      {
+        "id": "krusomchai.grader.score.partial",
+        "description": "Grader: scored, but not full marks yet.",
+        "defaults": {
+          "dark": "#d29922",
+          "light": "#bf8700",
+          "highContrast": "#d29922",
+          "highContrastLight": "#bf8700"
+        }
+      },
+      {
+        "id": "krusomchai.grader.score.zero",
+        "description": "Grader: submitted and scored zero.",
+        "defaults": {
+          "dark": "#f85149",
+          "light": "#cf222e",
+          "highContrast": "#f85149",
+          "highContrastLight": "#cf222e"
+        }
+      },
+      {
+        "id": "krusomchai.grader.score.none",
+        "description": "Grader: not started yet.",
+        "defaults": {
+          "dark": "#6e7681",
+          "light": "#8c959f",
+          "highContrast": "#6e7681",
+          "highContrastLight": "#8c959f"
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "grader.login",
+        "title": "Grader: Login",
+        "category": "Grader",
+        "icon": "$(sign-in)"
+      },
+      {
+        "command": "grader.logout",
+        "title": "Grader: Logout",
+        "category": "Grader",
+        "icon": "$(sign-out)"
+      },
+      {
+        "command": "grader.reload",
+        "title": "Grader: Reload Challenges",
+        "category": "Grader",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "grader.showChallenge",
+        "title": "Grader: Show Challenge Details",
+        "category": "Grader",
+        "icon": "$(preview)"
+      },
+      {
+        "command": "grader.openFile",
+        "title": "Grader: Open Challenge File",
+        "category": "Grader",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "grader.run",
+        "title": "Grader: Run Active File",
+        "category": "Grader",
+        "icon": "$(play)"
+      },
+      {
+        "command": "grader.submit",
+        "title": "Grader: Submit Active File",
+        "category": "Grader",
+        "icon": "$(check)"
+      },
+      {
+        "command": "grader.showOutput",
+        "title": "Grader: Show Results Panel",
+        "category": "Grader",
+        "icon": "$(output)"
+      },
+      {
+        "command": "grader.pullActiveFile",
+        "title": "Grader: Pull Latest Saved Code for Active File",
+        "category": "Grader"
+      },
+      {
+        "command": "grader.copyStdin",
+        "title": "Grader: Copy First Testcase Input",
+        "category": "Grader"
+      },
+      {
+        "command": "grader.setApiUrl",
+        "title": "Grader: Set API URL",
+        "category": "Grader"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "grader.reload",
+          "when": "view == grader.problems",
+          "group": "navigation@1"
+        },
+        {
+          "command": "grader.login",
+          "when": "view == grader.problems && !grader.signedIn",
+          "group": "navigation@2"
+        },
+        {
+          "command": "grader.logout",
+          "when": "view == grader.problems && grader.signedIn",
+          "group": "navigation@3"
+        },
+        {
+          "command": "grader.showOutput",
+          "when": "view == grader.problems",
+          "group": "navigation@4"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "grader.showChallenge",
+          "when": "view == grader.problems && viewItem == grader.challenge",
+          "group": "inline@1"
+        },
+        {
+          "command": "grader.openFile",
+          "when": "view == grader.problems && viewItem == grader.challenge",
+          "group": "0_file@1"
+        },
+        {
+          "command": "grader.run",
+          "when": "view == grader.problems && viewItem == grader.challenge",
+          "group": "1_run@1"
+        },
+        {
+          "command": "grader.submit",
+          "when": "view == grader.problems && viewItem == grader.challenge",
+          "group": "1_run@2"
+        },
+        {
+          "command": "grader.copyStdin",
+          "when": "view == grader.problems && viewItem == grader.challenge",
+          "group": "2_copy@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "grader.showChallenge"
+        },
+        {
+          "command": "grader.openFile"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Grader",
+      "properties": {
+        "grader.apiUrl": {
+          "type": "string",
+          "default": "https://grader.krusomchai.online",
+          "description": "Base URL of the Grader API."
+        },
+        "grader.workspaceFolder": {
+          "type": "string",
+          "default": "grader",
+          "description": "Folder inside the workspace where challenge files are synced."
+        },
+        "grader.languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "python",
+              "cpp"
+            ]
+          },
+          "default": [
+            "python",
+            "cpp"
+          ],
+          "description": "Languages to sync. The API only supports python and cpp."
+        },
+        "grader.syncOnReload": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fetch challenges and sync files when the extension activates."
+        },
+        "grader.lazyLanguageFetch": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fetch a language's code from the API only when a file of that language is opened, instead of during every reload. Reduces request volume, since the API returns 502s under load."
+        },
+        "grader.pushOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Push local edits to the server when you save a challenge file. Requires a POST /api/user/code endpoint; falls back to submit-only if the server rejects it."
+        },
+        "grader.requestTimeoutMs": {
+          "type": "number",
+          "default": 15000,
+          "description": "Timeout for a single API request in milliseconds."
+        },
+        "grader.maxRetries": {
+          "type": "number",
+          "default": 3,
+          "description": "How many times to retry a request that fails with a 5xx or network error."
+        },
+        "grader.syncConcurrency": {
+          "type": "number",
+          "default": 4,
+          "description": "How many code requests to issue in parallel during sync. Keep this low; the API returns 502 when overloaded."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "npm run check-types && node esbuild.js --production",
+    "check-types": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "node run-tests.js",
+    "preview": "esbuild src/test/preview.ts --bundle --platform=node --format=cjs --outfile=out/preview.js --alias:vscode=./src/test/vscode-stub.ts && node out/preview.js",
+    "check-layout": "esbuild src/test/layout.ts --bundle --platform=node --format=cjs --outfile=out/layout.js && node out/layout.js",
+    "vsix": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.2"
+  }
+}

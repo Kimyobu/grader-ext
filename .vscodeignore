@@ -1,0 +1,12 @@
+.vscode/**
+src/**
+.gitignore
+grader
+grader-ext.vsix
+grader-ext-*.vsix
+tsconfig.json
+esbuild.js
+run-tests.js
+out/**
+node_modules/**
+*.vsix
